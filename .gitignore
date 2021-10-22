@@ -1,0 +1,14 @@
+!*.py
+*.c
+*.mp3
+*.PNG
+*.mp3
+*.png
+*/*
+*.mp3
+*.binaryfile
+*.spec
+*.zip
+*.log
+*.jar
+.gitattributes
