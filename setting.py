@@ -13,11 +13,14 @@ def main():
     home=expanduser("~")
     path=home+"\\AppData\\Roaming\\.minecraft\\mods"
     isForge = False
-    version = None
-    forgename="forge-"+str(version)+"-installer.jar"
+    isMod = False
+    version = ""
+
 
     while True:
         isForgeQ = input("Forgeをダウンロードしますか？(y/n)").lower()
+        if len(isForgeQ)==0:
+            continue
         if isForgeQ[0]=="y":
             isForge = True
             break
@@ -30,10 +33,11 @@ def main():
 
         while True:
             print("ダウンロードしたいForgeのバージョンを入力してください。")
-            version = input("入力例:1.12.2-14.23.5.2855")
-            if version is not None:
+            print("入力例:1.12.2-14.23.5.2855")
+            version = input()
+            if len(version)!=0:
                 break
-
+        forgename="forge-"+str(version)+"-installer.jar"
         print(forgename+"をダウンロードします")
         url="https://maven.minecraftforge.net/net/minecraftforge/forge/"+version+"/"+forgename
         for i in tqdm.tqdm(range(int(1e7))):
@@ -46,23 +50,36 @@ def main():
 
         print(forgename+"を確認")
 
-    if not os.path.exists(modsname):
+
+    while True:
+        isModQ = input("Modの導入をしますか？(y/n)").lower()
+        if len(isModQ)==0:
+            continue
+
+        if isModQ[0]=="y":
+            isMod=True
+            break
+        elif  isModQ[0]=="n":
+            break
+
+    if not os.path.exists(modsname) and isMod==True:
         print("Error : ModsFile is not in same directry.")
         print("modが入ったzipを "+modsname+" にリネームして同じ階層に配置してください。")
         input("Enterを押すと終了します...")
         return
 
-    if not os.path.exists(path):
+    if not os.path.exists(path) and isMod==True:
         os.mkdir(path)
         print("modsファイルを新規作成しました")
-    else:
-        isApdQ = False
+    elif isMod==True:
+
 
         while True:
 
             print("すでにmodsファイルが存在しています！バックアップしますか？")
             isApd = input("※zipファイルで別途保存します(y/n)").lower()
-
+            if len(isApd)==0:
+                continue
             if isApd[0]=="y":
                 isApdQ = True
                 break
@@ -83,9 +100,11 @@ def main():
         shutil.rmtree(path)
         os.mkdir(path)
 
-    with zipfile.ZipFile(modsname) as existnig_zip:
-        existnig_zip.extractall(path)
-        print("modsの導入に成功しました")
+        with zipfile.ZipFile(modsname) as existnig_zip:
+            existnig_zip.extractall(path)
+            print("modsの導入に成功しました")
+
+    print("作業はすべて完了しました")
 
     input("Enterを押すと終了します...")
 
