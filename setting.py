@@ -9,6 +9,7 @@ from os.path import expanduser
 
 
 def main():
+
     modsname="mods.zip"
     home=expanduser("~")
     path=home+"\\AppData\\Roaming\\.minecraft\\mods"
@@ -48,6 +49,15 @@ def main():
         with open(forgename,mode="wb") as f:
             f.write(urlData)
 
+        if os.path.getsize(forgename)<1000:
+            print("Error : The version of the Forge installer is not existing..")
+            print("そのようなバージョンのForgeは存在していないようです...。")
+            os.remove(forgename)
+            input("Enterを押すと終了します...")
+            return
+
+
+
         print(forgename+"を確認")
 
 
@@ -63,7 +73,7 @@ def main():
             break
 
     if not os.path.exists(modsname) and isMod==True:
-        print("Error : ModsFile is not in same directry.")
+        print("Error : ModsFile is not in the same directory.")
         print("modが入ったzipを "+modsname+" にリネームして同じ階層に配置してください。")
         input("Enterを押すと終了します...")
         return
@@ -90,9 +100,7 @@ def main():
             print("modsファイルのバックアップを作成します")
             for i in tqdm.tqdm(range(int(1e7))):
                 np.pi*np.pi
-            """
-            urlData = requests.get(url).content
-            """
+
             dt = str(datetime.today()).replace(".","").replace(":","").replace("-","").replace(" ","")
             shutil.make_archive(home+"\\AppData\\Roaming\\.minecraft\\"+str(dt)+"mods","zip",path)
             print("modsファイルのバックアップを作成しました")
